@@ -22,7 +22,7 @@ SELECT country,year,count(*) FROM Olympics WHERE medal <> '' GROUP BY country,ye
 SELECT DISTINCT(name) FROM olympics WHERE id IN (SELECT id FROM Olympics WHERE medal <> '' GROUP BY id,year,sport HAVING COUNT(*)>1);
 
 USE insurance;
-SELECT * FROM InsuranceData;
+SELECT * FROM insuranceData;
 
 -- 6. How many patients have claimed more than the average claim amount for patients who are smokers and have at least one child, and belong to the 
 -- southeast region?
