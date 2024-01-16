@@ -43,7 +43,16 @@ WITH filtered_data AS (SELECT * FROM insuranceData WHERE diabetic="No" AND bmi B
 SELECT t.region,t.gender,t.first_claim FROM (SELECT *,FIRST_VALUE(claim) OVER(PARTITION BY region,gender ORDER BY age ASC) AS first_claim,ROW_NUMBER() OVER(PARTITION BY region,
 gender ORDER BY age ASC) AS row_num FROM filtered_data) AS t WHERE t.row_num=1;
 
+USE nw;
+SELECT * FROM nw_employees;
+SELECT * FROM nw_order_details;
+SELECT * FROM nw_orders;
+SELECT * FROM nw_products;
+SELECT * FROM nw_suppliers;
+
 -- 12. Rank Employee in terms of revenue generation. Show employee id, first name, revenue, and rank
+SELECT e.EmployeeID,e.FirstName,SUM(od.UnitPrice * od.Quantity) AS Revenue,RANK() OVER(ORDER BY SUM(od.UnitPrice * od.Quantity) DESC) AS EmpRank FROM nw_orders o INNER JOIN 
+nw_order_details od USING(OrderID) INNER JOIN nw_employees e USING(EmployeeID) GROUP BY e.EmployeeID,e.firstName ORDER BY EmpRank;
 
 -- 13. Show All products cumulative sum of units sold each month.
 
