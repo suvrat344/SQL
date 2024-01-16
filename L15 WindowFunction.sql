@@ -96,6 +96,8 @@ SELECT drug.Condition,drug.drug,ROUND(drug.Price,2),ROUND(AVG(drug.Price) OVER(P
 AS running_avg_price FROM drug ORDER BY drug.Condition ASC,drug.drug ASC;
 
 -- 22. What is the percentage change in the number of reviews for each drug between the previous row and the current row? Show the results in descending order by percentage change.
+SELECT drug.Condition,drug.drug,ROUND(drug.Reviews,2),ROUND(drug.Reviews - LAG(drug.Reviews) OVER(PARTITION BY drug.Condition,drug.drug ORDER BY drug.Reviews DESC) * 100 / 
+LAG(drug.Reviews) OVER(PARTITION BY drug.Condition,drug.drug ORDER BY drug.Reviews DESC),2) AS "pctChange" FROM drug ORDER BY pctChange DESC;
 
 -- 23. What is the percentage of total satisfaction level for each drug type (RX, OTC, RX/OTC)? Show the results in descending order by drug type and percentage of total 
 -- satisfaction.  
