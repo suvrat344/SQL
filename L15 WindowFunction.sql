@@ -55,6 +55,8 @@ SELECT e.EmployeeID,e.FirstName,SUM(od.UnitPrice * od.Quantity) AS Revenue,RANK(
 nw_order_details od USING(OrderID) INNER JOIN nw_employees e USING(EmployeeID) GROUP BY e.EmployeeID,e.firstName ORDER BY EmpRank;
 
 -- 13. Show All products cumulative sum of units sold each month.
+SELECT p.ProductID,MONTHNAME(o.OrderDate) AS "Month",SUM(od.Quantity) AS "QuantitySum",SUM(SUM(od.Quantity)) OVER(PARTITION BY p.ProductID ORDER BY MONTHNAME(o.OrderDate)) AS 
+"QuantityCumulativeSum" FROM nw_orders o INNER JOIN nw_order_details od USING(OrderID) INNER JOIN nw_products p USING(ProductID) GROUP BY p.ProductID,MONTHNAME(o.OrderDate);
 
 -- 14. Show Percentage of total revenue by each suppliers
 
