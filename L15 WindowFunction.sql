@@ -92,6 +92,8 @@ SELECT type,EaseOfUse,COUNT(*) OVER(PARTITION BY type ORDER BY EaseOfUse ROWS BE
 -- result.)
 
 -- 21. What is the running average of the price of drugs for each medical condition? Show the results in ascending order by medical condition and drug name.
+SELECT drug.Condition,drug.drug,ROUND(drug.Price,2),ROUND(AVG(drug.Price) OVER(PARTITION BY drug.Condition ORDER BY drug.drug ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),2)
+AS running_avg_price FROM drug ORDER BY drug.Condition ASC,drug.drug ASC;
 
 -- 22. What is the percentage change in the number of reviews for each drug between the previous row and the current row? Show the results in descending order by percentage change.
 
