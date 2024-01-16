@@ -78,7 +78,8 @@ SELECT s.SupplierID,ROUND(SUM(od.UnitPrice * od.Quantity),2) AS Revenue,ROUND(SU
 
 -- 15. Show Percentage of total orders by each suppliers
 
-
+SELECT s.SupplierID,COUNT(DISTINCT OrderID) AS TotalOrder,ROUND(COUNT(DISTINCT OrderID)/SUM(COUNT(DISTINCT OrderID)) OVER() * 100,2) AS PercentOfTotalOrder FROM nw_suppliers s
+INNER JOIN nw_products p INNER JOIN nw_order_details od USING(ProductID) GROUP BY s.SupplierID ORDER BY TotalOrder DESC;
 
 -- 16. Show All Products Year Wise report of totalQuantity sold, percentage change from last year.
 
