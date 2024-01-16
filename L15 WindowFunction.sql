@@ -83,6 +83,13 @@ INNER JOIN nw_products p INNER JOIN nw_order_details od USING(ProductID) GROUP B
 
 -- 16. Show All Products Year Wise report of totalQuantity sold, percentage change from last year.
 
+SELECT *,ROUND(100*(t.TotalQuantity - LAG(t.TotalQuantity) OVER (PARTITION BY t.ProductID ORDER BY t.ProductID))/ LAG(t.TotalQuantity) OVER (PARTITION BY t.ProductID ORDER BY 
+t.ProductID),2) AS PercentChange FROM (SELECT p.ProductID,YEAR(OrderDate),SUM(od.Quantity) AS TotalQuantity FROM nw_orders AS o INNER JOIN nw_order_details AS od USING(OrderID) 
+INNER JOIN nw_products AS p USING(ProductID) GROUP BY p.ProductID,YEAR(OrderDate) ORDER BY p.ProductID,YEAR(OrderDate)) AS t;
+
+USE drug;
+SELECT * FROM drug;
+
 -- 17. For each condition, what is the average satisfaction level of drugs that are "On Label" vs "Off Label"?
 
 -- 18.  For each drug type (RX, OTC, RX/OTC), what is the average ease of use and satisfaction level of drugs with a price above the median for their type?
