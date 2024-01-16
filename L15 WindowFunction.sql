@@ -81,6 +81,10 @@ FROM drug)
 SELECT temp.Condition,temp.Indication,temp.Satisfaction FROM temp WHERE rank_num=1;
 
 -- 18.  For each drug type (RX, OTC, RX/OTC), what is the average ease of use and satisfaction level of drugs with a price above the median for their type?
+WITH temp_df as (SELECT Type,AVG(EaseOfUse) OVER(PARTITION BY Type) AS avg_ease_of_use,AVG(Satisfaction) OVER(PARTITION BY Type) AS avg_satisfaction FROM (SELECT Type, Price,
+PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Price) OVER (PARTITION BY Type) AS median_price,EaseOfUse,Satisfaction FROM drugs WHERE Type IN ('RX', 'OTC', 'RX/OTC')) AS subquery
+WHERE Price >= median_price)
+SELECT Type, avg_ease_of_use, avg_satisfaction FROM temp_df GROUP BY Type;
 
 -- 19. What is the cumulative distribution of EaseOfUse ratings for each drug type (RX, OTC, RX/OTC)? Show the results in descending order by drug type and cumulative 
 -- distribution. (Use the built-in method and the manual method by calculating on your own. For the manual method, use the "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW" and 
@@ -90,6 +94,8 @@ SELECT type,EaseOfUse,COUNT(*) OVER(PARTITION BY type ORDER BY EaseOfUse ROWS BE
 
 -- 20. What is the median satisfaction level for each medical condition? Show the results in descending order by median satisfaction level. (Don't repeat the same rows of your 
 -- result.)
+WITH temp_df AS (SELECT drugs.Condition,PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY drugs.Satisfaction) OVER (PARTITION BY drugs.Condition) AS median_satisfaction FROM drugs)
+SELECT temp_df.Condition, temp_df.median_satisfaction FROM temp_df GROUP BY temp_df.Condition ORDER BY temp_df.median_satisfaction DESC;
 
 -- 21. What is the running average of the price of drugs for each medical condition? Show the results in ascending order by medical condition and drug name.
 SELECT drug.Condition,drug.drug,ROUND(drug.Price,2),ROUND(AVG(drug.Price) OVER(PARTITION BY drug.Condition ORDER BY drug.drug ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),2)
