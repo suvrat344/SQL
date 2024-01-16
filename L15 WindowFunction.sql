@@ -114,4 +114,7 @@ PRECEDING AND CURRENT ROW),2) AS cumulative_sum_effective FROM drug ORDER BY dru
 SELECT type,AVG(EaseOfUse),RANK() OVER(ORDER BY AVG(EaseOfUse) DESC) AS 'rank' FROM drug WHERE type IN ('RX','OTC','RX/OTC') GROUP BY type;
 
 -- 26. For each condition, what is the average effectiveness of the top 3 most reviewed drugs?
+SELECT * FROM(SELECT drug.Condition,drug.drug,ROUND(drug.Reviews,2) AS "Reviews",ROUND(AVG(drug.Effective) OVER(PARTITION BY drug.Condition,drug,drug.drug ROWS BETWEEN 
+UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING),2) AS AverageEffectiveness,RANK() OVER(PARTITION BY drug.Condition ORDER BY drug.Reviews DESC) AS rank_num FROM drug) AS t WHERE 
+t.rank_num<=3;
 
