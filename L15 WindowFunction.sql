@@ -107,6 +107,8 @@ SELECT type,pct_total_satisfaction FROM temp GROUP BY type,pct_total_satisfactio
 
 -- 24. What is the cumulative sum of effective ratings for each medical condition and drug form combination? Show the results in ascending order by medical condition, drug form 
 -- and the name of the drug.
+SELECT drug.Condition,drug.Form,drug.drug,ROUND(drug.Effective,2),ROUND(SUM(drug.Effective) OVER(PARTITION BY drug.Condition,drug.Form ORDER BY drug.drug ROWS BETWEEN UNBOUNDED
+PRECEDING AND CURRENT ROW),2) AS cumulative_sum_effective FROM drug ORDER BY drug.Condition ASC,drug.Form ASC,drug.drug ASC;
 
 -- 25. What is the rank of the average ease of use for each drug type (RX, OTC, RX/OTC)? Show the results in descending order by rank and drug type.
 
