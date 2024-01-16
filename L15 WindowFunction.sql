@@ -85,6 +85,8 @@ SELECT temp.Condition,temp.Indication,temp.Satisfaction FROM temp WHERE rank_num
 -- 19. What is the cumulative distribution of EaseOfUse ratings for each drug type (RX, OTC, RX/OTC)? Show the results in descending order by drug type and cumulative 
 -- distribution. (Use the built-in method and the manual method by calculating on your own. For the manual method, use the "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW" and 
 -- see if you get the same results as the built-in method.)
+SELECT type,EaseOfUse,COUNT(*) OVER(PARTITION BY type ORDER BY EaseOfUse ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) * 1 / COUNT(*) OVER(PARTITION BY type) AS 
+"Cumulative_dist",CUME_DIST() OVER(PARTITION BY type ORDER BY EaseOfUse) AS "Percentile_Score" FROM drug WHERE type IN ("RX","OTC","RX/OTC") ORDER BY type,Cumulative_dist;
 
 -- 20. What is the median satisfaction level for each medical condition? Show the results in descending order by median satisfaction level. (Don't repeat the same rows of your 
 -- result.)
