@@ -101,6 +101,9 @@ LAG(drug.Reviews) OVER(PARTITION BY drug.Condition,drug.drug ORDER BY drug.Revie
 
 -- 23. What is the percentage of total satisfaction level for each drug type (RX, OTC, RX/OTC)? Show the results in descending order by drug type and percentage of total 
 -- satisfaction.  
+WITH temp AS (SELECT type,ROUND(Satisfaction,2) AS "Satisfaction",ROUND(SUM(Satisfaction) OVER(PARTITION BY type) / SUM(Satisfaction) OVER(),2) AS "pct_total_satisfaction" FROM 
+drug WHERE type IN ("RX","OTC","RX/OTC") ORDER BY type ASC,pct_total_satisfaction DESC)
+SELECT type,pct_total_satisfaction FROM temp GROUP BY type,pct_total_satisfaction;
 
 -- 24. What is the cumulative sum of effective ratings for each medical condition and drug form combination? Show the results in ascending order by medical condition, drug form 
 -- and the name of the drug.
