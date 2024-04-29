@@ -1,10 +1,9 @@
 -- Data Manipulation Language
 
-CREATE DATABASE insurance;
-USE insurance;
+CREATE DATABASE assignment;
+USE assignment;
 SET SQL_SAFE_UPDATES = 0;
 SELECT * FROM insurance;
-DROP TABLE insurance;
 
 -- 1. Show records of 'male' patient from 'southwest' region.
 SELECT * FROM insurance WHERE gender='male' AND region="southwest";
