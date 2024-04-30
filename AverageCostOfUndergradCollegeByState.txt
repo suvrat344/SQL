@@ -1,0 +1,6 @@
+Year :  The Digest year this information comes from
+State :  The U.S. State
+Type :  Type of University, Private or Public and in-state or out-of-state. Private colleges charge the same for in/out of state
+Length : Whether the college mainly offers 2-year (Associates) or 4-year (Bachelors) programs
+Expense : The Expense being described, tuition/fees or on-campus living expenses
+Value : The average cost for this particular expense, in USD ($)
