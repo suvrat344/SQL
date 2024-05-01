@@ -9,28 +9,39 @@ SELECT * FROM sleep_efficiency;
 FROM
     sleep_efficiency
 WHERE
-    gender = 'Male' AND SleepDuration >= 7.5
-ORDER BY SleepDuration DESC
+    gender = 'Male' 
+		AND 
+	SleepDuration >= 7.5
+ORDER BY 
+	SleepDuration DESC
 LIMIT 15;
+ 
  
 -- 2. Show avg deep sleep time for both gender. Round result at 2 decimal places.
 -- Note: sleep time and deep sleep percentage will give you, deep sleep time.
 SELECT 
-    gender, AVG(DeepSleepPercentage * SleepDuration / 100)
+    gender, 
+    AVG(DeepSleepPercentage * SleepDuration / 100)
 FROM
     sleep_efficiency
-GROUP BY gender;
+GROUP BY 
+	gender;
 
--- 3. Find out the lowest 10th to 30th light sleep percentage records where deep sleep percentage values are between 25 to 45. Display age, light 
--- sleep percentage and deep sleep percentage columns only.
+
+-- 3. Find out the lowest 10th to 30th light sleep percentage records where deep sleep percentage values are between 25 to 45. Display age,
+-- light sleep percentage and deep sleep percentage columns only.
 SELECT 
-    age, LightSleepPercentage, DeepSleepPercentage
+    age, 
+    LightSleepPercentage, 
+    DeepSleepPercentage
 FROM
     sleep_efficiency
 WHERE
     DeepSleepPercentage BETWEEN 25 AND 45
-ORDER BY LightSleepPercentage
+ORDER BY 
+	LightSleepPercentage
 LIMIT 10 , 20;
+
 
 -- 4. Group by on exercise frequency and smoking status and show average deep sleep time, average light sleep time and avg rem sleep time.
 -- Note the differences in deep sleep time for smoking and non smoking status
@@ -42,11 +53,15 @@ SELECT
     AVG(RemSleepPercentage * SleepDuration / 100)
 FROM
     sleep_efficiency
-GROUP BY ExerciseFrequency , SmokingStatus
-ORDER BY DeepSleep;
+GROUP BY 
+	ExerciseFrequency, 
+    SmokingStatus
+ORDER BY 
+	DeepSleep;
 
--- 5. Group By on Awakening and show AVG Caffeine consumption, AVG Deep sleep time and AVG Alcohol consumption only for people who do exercise 
--- atleast 3 days a week. Show result in descending order awekenings
+
+-- 5. Group By on Awakening and show AVG Caffeine consumption, AVG Deep sleep time and AVG Alcohol consumption only for people who do 
+-- exercise atleast 3 days a week. Show result in descending order awekenings
 SELECT 
     AVG(CaffeineConsumption),
     AVG(DeepSleepPercentage * SleepDuration / 100),
@@ -55,8 +70,10 @@ FROM
     sleep_efficiency
 WHERE
     ExerciseFrequency >= 3
-GROUP BY awakenings
-ORDER BY awakenings DESC;
+GROUP BY 
+	awakenings
+ORDER BY 
+	awakenings DESC;
 
 
 SELECT * From powergeneration;
@@ -69,16 +86,21 @@ SELECT
     COUNT(*) AS occurence
 FROM
     powergeneration
-GROUP BY `Power Station`
-HAVING AverageMonitoredCap BETWEEN 1000 AND 2000
-    AND occurence > 200
-ORDER BY AverageMonitoredCap ASC;
+GROUP BY 
+	`Power Station`
+HAVING 
+	AverageMonitoredCap BETWEEN 1000 AND 2000
+		AND 
+	occurence > 200
+ORDER BY 
+	AverageMonitoredCap ASC;
 
 
 SELECT * FROM nces;
 
--- 7. Display top 10 lowest "value" State names of which the Year either belong to 2013 or 2017 or 2021 and type is 'Public In-State'. Also the number 
--- of occurance should be between 6 to 10. Display the average value upto 2 decimal places, state names and the occurance of the states.
+-- 7. Display top 10 lowest "value" State names of which the Year either belong to 2013 or 2017 or 2021 and type is 'Public In-State'. Also
+-- the number of occurance should be between 6 to 10. Display the average value upto 2 decimal places, state names and the occurance of '
+-- the states.
 SELECT 
     state,
     ROUND(AVG(value), 2) AS AvgValue,
@@ -87,11 +109,16 @@ FROM
     nces
 WHERE
     type = 'Public In-State'
-        AND year IN (2013 , 2017, 2021)
-GROUP BY state
-HAVING frequency BETWEEN 6 AND 10
-ORDER BY AvgValue ASC
+        AND 
+	year IN (2013 , 2017, 2021)
+GROUP BY 
+	state
+HAVING 
+	frequency BETWEEN 6 AND 10
+ORDER BY 
+	AvgValue ASC
 LIMIT 10;
+
 
 -- 8. Best state in terms of low education cost (Tution Fees) in 'Public' type university.
 SELECT 
@@ -100,20 +127,29 @@ FROM
     nces
 WHERE
     type LIKE '%Public%'
-        AND expense LIKE '%Tuition%'
-GROUP BY state
-ORDER BY AverageValue ASC
+        AND 
+	expense LIKE '%Tuition%'
+GROUP BY 
+	state
+ORDER BY 
+	AverageValue ASC
 LIMIT 1;
+
 
 -- 9. 2nd Costliest state for Private education in year 2021. Consider, Tution and Room fee both.
 SELECT 
-    state, AVG(value) AS AverageValue
+    state, 
+    AVG(value) AS AverageValue
 FROM
     nces
 WHERE
-    type LIKE 'Private' AND year = 2021
-GROUP BY state
-ORDER BY AverageValue DESC
+    type LIKE 'Private' 
+		AND 
+	year = 2021
+GROUP BY 
+	state
+ORDER BY 
+	AverageValue DESC
 LIMIT 1 , 1;
 
 
@@ -131,6 +167,11 @@ FROM
     ECommerceShipping
 WHERE
     gender = 'M'
-        AND Product_importance = 'High'
-GROUP BY mode_of_shipment , Warehouse_block
-ORDER BY Mode_of_Shipment DESC , Warehouse_block ASC;
+        AND 
+	Product_importance = 'High'
+GROUP BY 
+	mode_of_shipment,
+    Warehouse_block
+ORDER BY 
+	Mode_of_Shipment DESC,
+    Warehouse_block ASC;
