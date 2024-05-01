@@ -12,7 +12,9 @@ SELECT
 FROM
     insurance
 WHERE
-    gender = 'male' AND region = 'southwest';
+    gender = 'male' 
+		AND 
+	region = 'southwest';
 
 
 -- 2. Show all records having bmi in range 30 to 45 both inclusive.
@@ -26,11 +28,14 @@ WHERE
 
 -- 3. Show minimum and maximum bloodpressure of diabetic patient who smokes. Make column names as MinBP and MaxBP respectively.
 SELECT 
-    MIN(bloodpressure) AS MinBP, MAX(bloodpressure) AS MaxBP
+    MIN(bloodpressure) AS MinBP, 
+    MAX(bloodpressure) AS MaxBP
 FROM
     insurance
 WHERE
-    diabetic = 'Yes' AND smoker = 'Yes';
+    diabetic = 'Yes' 
+		AND 
+	smoker = 'Yes';
 
 
 -- 4. Find no of unique patients who are not from southwest region.
@@ -48,7 +53,9 @@ SELECT
 FROM
     insurance
 WHERE
-    gender = 'male' AND smoker = 'Yes';
+    gender = 'male' 
+		AND 
+	smoker = 'Yes';
 
 
 -- 6. Select all records of south region.
@@ -78,7 +85,8 @@ FROM
     insurance
 WHERE
     age < 17
-        AND bloodpressure BETWEEN 80 + age * 2 AND 100 + age * 2;
+        AND 
+	bloodpressure BETWEEN 80 + age * 2 AND 100 + age * 2;
 
 
 -- 9. What is the average claim amount for non-smoking female patients who are diabetic?
@@ -87,8 +95,11 @@ SELECT
 FROM
     insurance
 WHERE
-    gender = 'female' AND smoker = 'No'
-        AND diabetic = 'Yes';
+    gender = 'female' 
+		AND 
+	smoker = 'No'
+        AND 
+	diabetic = 'Yes';
 
 
 -- 10. Write a SQL query to update the claim amount for the patient with PatientID = 1234 to 5000.
@@ -102,4 +113,6 @@ WHERE
 -- 11. Write a SQL query to delete all records for patients who are smokers and have no children.
 DELETE FROM insurance 
 WHERE
-    smoker = 'Yes' AND children = 0;
+    smoker = 'Yes' 
+		AND 
+	children = 0;
