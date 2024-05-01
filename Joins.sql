@@ -10,39 +10,52 @@ SELECT * FROM country_efg;
 SELECT 
     t1.country, a, d
 FROM
-    (SELECT 
-        country, a
+(
+	SELECT 
+        country, 
+        a
     FROM
         country_ab
     ORDER BY 
 		A DESC
-    LIMIT 10) t1
-        LEFT JOIN
-    (SELECT 
-        country, d
+    LIMIT 10
+) t1
+LEFT JOIN
+(
+	SELECT 
+        country,
+        d
     FROM
         country_cd
     ORDER BY 
 		D DESC
-    LIMIT 10) t2 ON t1.country = t2.country 
-UNION SELECT 
+    LIMIT 10
+) t2 ON t1.country = t2.country 
+UNION 
+SELECT 
     t2.country, a, d
 FROM
-    (SELECT 
-        country, a
+(
+	SELECT 
+        country,
+        a
     FROM
         country_ab
     ORDER BY 
 		A DESC
-    LIMIT 10) t1
-        RIGHT JOIN
-    (SELECT 
-        country, d
+    LIMIT 10
+) t1
+RIGHT JOIN
+(
+	SELECT 
+        country,
+        d
     FROM
         country_cd
     ORDER BY 
 		D DESC
-    LIMIT 10) t2 ON t1.country = t2.country
+    LIMIT 10
+) t2 ON t1.country = t2.country
 ORDER BY 
 	country;
 
@@ -107,7 +120,8 @@ SELECT
 FROM
     employees
 WHERE
-    EmployeeID = (SELECT 
+    EmployeeID = (
+		SELECT 
             employees.EmployeeID
         FROM
             sales1
@@ -117,7 +131,8 @@ WHERE
 			employees.EmployeeID
         ORDER BY 
 			COUNT(DISTINCT CustomerID) DESC
-        LIMIT 1);
+        LIMIT 1
+        );
 
 
 -- 6.  Sales man who has generated most revenue. Show top 5.
