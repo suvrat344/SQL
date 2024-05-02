@@ -3257,6 +3257,33 @@ INSERT INTO employee1 VALUES
 ('E475','M230','SM115','LM78','C78'),
 ('E43','M17','SM12','LM9','C9');
 
+CREATE TABLE employee2(
+id INT,
+name VARCHAR(50),
+SALARY INT);
+
+INSERT INTO employee2 VALUES
+(1,'Ashley',2340),
+(2,'Julia',1198),
+(3,'Britney',9009),
+(4,'Kristeen',2341),
+(5,'Dyana',9990),
+(6,'Diana',8011),
+(7,'Jenny',2341),
+(8,'Christeen',2342),
+(9,'Meera',2343),
+(10,'Priya',2344),
+(11,'Priyanka',2345),
+(12,'Paige',2346),
+(13,'Jane',2347),
+(14,'Belvet',2348),
+(15,'Scarlet',2349),
+(16,'Salma',9087),
+(17,'Amanda',7777),
+(18,'Aamina',5500),
+(19,'Amina',2570),
+(20,'Ketty',2007);
+
 -- 1. Query all columns for all American cities in the CITY table with populations larger than 100000. The CountryCode for America is USA.
 SELECT 
 	* 
@@ -3560,4 +3587,63 @@ FROM
 	city;
     
     
--- 29.
+-- 29. Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize
+-- her keyboard's 0 key was broken until after completing the calculation. She wants your help finding the difference between her 
+-- miscalculation (using salaries with any zeros removed), and the actual average salary.
+-- Write a query calculating the amount of error (actual - miscalculated i.e.:  average monthly salaries), and round it up to the next 
+-- integer.
+set @actual = (SELECT AVG(salary) FROM employee2);
+set @miscalculated = (SELECT AVG(REPLACE(salary,0,'')) FROM employee2);
+SELECT 
+	CEIL(@actual - @miscalculated);
+--                          OR
+SELECT
+	CEIL(AVG(salary) - AVG(REPLACE(salary,0,''))) 
+FROM 
+	employee2;
+    
+    
+-- 30. We define an employee's total earnings to be their monthly salary * months worked, and the maximum total earnings to be the 
+-- maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as 
+-- well as the total number of employees who have maximum total earnings. Then print these values as 2 space-separated integers.
+set @maxSalary = (SELECT MAX(salary * months) FROM employee);
+SELECT @maxSalary,COUNT(*) FROM employee WHERE salary*months = @maxSalary;
+--                       OR
+SELECT 
+	MAX(salary * months),
+    COUNT(*)
+FROM 
+	employee 
+WHERE 
+	salary * months = 
+    (
+		SELECT 
+			MAX(salary * months)  
+		FROM 
+			employee
+	);
+    
+    
+-- 31. Query the following two values from the STATION table:
+-- 1. The sum of all values in LAT_N rounded to a scale of 2 decimal places.
+-- 2. The sum of all values in LONG_W rounded to a scale of 2 decimal places.
+SELECT
+	ROUND(SUM(LAT_N),2),
+    ROUND(SUM(LONG_W),2) 
+FROM 
+	station;
+    
+    
+-- 32. Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.2345. Truncate your
+-- answer to  decimal places
+SELECT
+	ROUND(SUM(LAT_N),4)
+FROM 
+	station 
+WHERE
+	LAT_N > 38.7880 
+		AND
+	LAT_N < 137.2345;
+    
+    
+-- 33. 
