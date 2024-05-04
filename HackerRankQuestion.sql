@@ -3646,4 +3646,72 @@ WHERE
 	LAT_N < 137.2345;
     
     
--- 33. 
+-- 33. Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. Truncate your answer to  
+-- decimal places.
+SELECT 
+	ROUND(MAX(LAT_N),4) 
+FROM 
+	station 
+WHERE 
+	LAT_N < 137.2345;
+    
+    
+-- 34. Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. Round your 
+-- answer to 4 decimal places.
+SELECT 
+	ROUND(LONG_W,4) 
+FROM 
+	station 
+WHERE 
+	LAT_N = 
+		(
+			SELECT 
+				MAX(LAT_N) 
+			FROM 
+				station
+			WHERE 
+				LAT_N < 137.2345
+		);
+                
+                
+-- 35. 	Query the smallest Northern Latitude (LAT_N) from STATION that is greater than 38.7780. Round your answer to 4 decimal places.
+SELECT 
+	ROUND(MIN(LAT_N),4) 
+FROM 
+	station 
+WHERE 
+	LAT_N > 38.7780;
+    
+    
+-- 36. Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. Round your 
+-- answer to  decimal places.
+SELECT 
+	ROUND(LONG_W,4) 
+FROM 
+	station 
+WHERE 
+	LAT_N = 
+		(
+			SELECT 
+				MIN(LAT_N) 
+			FROM 
+				station 
+			WHERE 
+				LAT_N > 38.7780
+		);
+        
+        
+-- 37. Consider P1(a,b) and P2(c,d) to be two points on a 2D plane.
+-- 1. a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+-- 2. b happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+-- 3. c happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+-- 4. d happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+-- Query the Manhattan Distance between points P1 and P2 and round it to a scale of 4 decimal places.
+
+SELECT 
+	(ABS(MIN(LAT_N) - MAX(LAT_N)) + ABS(MIN(LONG_W) - MAX(LONG_W)),4) AS "Manhattan Distance" 
+FROM 
+	station;
+    
+    
+-- 38. 
