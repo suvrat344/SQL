@@ -3714,4 +3714,28 @@ FROM
 	station;
     
     
--- 38. 
+-- 38. Consider P1(a,b) and P2(c,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern 
+-- Latitude (LAT_N) and (c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+-- Query the Euclidean Distance between points  and  and format your answer to display 4 decimal digits.
+SELECT 
+	ROUND(SQRT(POWER((MIN(LAT_N) - MAX(LAT_N)),2) +POWER((MIN(LONG_W) - MAX(LONG_W)),2)),4) AS "Euclidean Distance" 
+FROM 
+	station;
+    
+    
+-- 39. A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern 
+-- Latitudes (LAT_N) from STATION and round your answer to 4 decimal places.
+SELECT ROUND(AVG(LAT_N), 4) AS median
+FROM (
+    SELECT 
+        LAT_N,
+        ROW_NUMBER() OVER (ORDER BY LAT_N) AS row_num,
+        COUNT(*) OVER () AS total_rows
+    FROM 
+        STATION
+) AS t
+WHERE 
+    row_num IN (CEIL(total_rows / 2), FLOOR(total_rows / 2) + 1);
+
+
+-- 40 
