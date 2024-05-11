@@ -420,89 +420,360 @@ ALTER TABLE  members ADD CONSTRAINT members_fk2 FOREIGN KEY (id) REFERENCES facu
 --  Problems Related to Database 
 
 -- 1. Write an SQL statement to find the titles of books authored by an author having first name as 'Joh Paul' and last name as 'Mueller
-SELECT title FROM book_catalogue WHERE ISBN_no in (SELECT ISBN_no FROM book_authors as aut WHERE aut.author_fname="Joh Paul" AND aut.author_lname="Mueller"); 
+SELECT 
+	title 
+FROM 
+	book_catalogue 
+WHERE 
+	ISBN_no 
+IN
+	(
+		SELECT 
+			ISBN_no 
+		FROM 
+			book_authors AS aut 
+		WHERE 
+			aut.author_fname="Joh Paul" 
+				AND 
+			aut.author_lname="Mueller"
+	); 
 
 
 -- 2. Write a SQL statement to find the titles of books published by 'McGraw Hill Education'.
-SELECT title FROM book_catalogue WHERE publisher="McGraw Hill Education";
+SELECT 
+	title 
+FROM 
+	book_catalogue 
+WHERE 
+	publisher="McGraw Hill Education";
+    
 
 -- 3. Write a SQL statement to display the first name and the last name of students (student_fname, student_lname) pursuing 'PG' courses.
-SELECT student_fname,student_lname FROM students WHERE roll_no in (SELECT roll_no FROM members WHERE member_type="PG");
+SELECT 
+	student_fname,
+    student_lname 
+FROM 
+	students 
+WHERE 
+	roll_no 
+IN
+	(
+		SELECT 
+			roll_no 
+		FROM 
+			members 
+		WHERE 
+			member_type="PG"
+	);
 
--- 4. Write an SQL statement to find the first names and the last names (student_fname, student_lname) of students who belong to the department with department code 
--- as 'MCA' and who were born after '2002-06-15'. 
-SELECT student_fname,student_lname FROM students WHERE department_code='MCA' AND dob > '2002-06-15';
 
--- 5 Write an SQL statement to find the first names and the last names of faculty (faculty_fname, faculty_lname) who belong to the department:'Computer Science' and 
--- joined after '2015-03-03'.
-SELECT faculty_fname,faculty_lname FROM faculty WHERE department_code="CS" AND doj>'2015-03-03';
+-- 4. Write an SQL statement to find the first names and the last names (student_fname, student_lname) of students who belong to the 
+-- department with department code as 'MCA' and who were born after '2002-06-15'. 
+SELECT 
+	student_fname,
+    student_lname 
+FROM 
+	students 
+WHERE 
+	department_code='MCA' 
+		AND 
+	dob > '2002-06-15';
+    
+
+-- 5 Write an SQL statement to find the first names and the last names of faculty (faculty_fname, faculty_lname) who belong to the 
+-- department:'Computer Science' and joined after '2015-03-03'.
+SELECT 
+	faculty_fname,
+    faculty_lname 
+FROM 
+	faculty 
+WHERE 
+	department_code="CS" 
+		AND 
+	doj>'2015-03-03';
 
 
--- 6. Write an SQL statement to find the first names and the last names of faculty (faculty fname, faculty lname) who belong to the department: ”Computer Science”.
-SELECT faculty_fname,faculty_lname FROM faculty WHERE department_code="CS";
+-- 6. Write an SQL statement to find the first names and the last names of faculty (faculty fname, faculty lname) who belong to the 
+-- department: ”Computer Science”.
+SELECT 
+	faculty_fname,
+    faculty_lname 
+FROM 
+	faculty 
+WHERE 
+	department_code="CS";
+    
 
--- 7. Write an SQL statement to find the first name, last name of the faculty of the department having department code as 'ME' and who have issued at least one book, 
--- such that there are no duplicate firstname-lastname pairs.
-SELECT DISTINCT faculty_fname,faculty_lname FROM faculty WHERE department_code = 'ME' AND id IN (SELECT m.id FROM members m INNER JOIN book_issue USING(member_no));
+-- 7. Write an SQL statement to find the first name, last name of the faculty of the department having department code as 'ME' and who 
+-- have issued at least one book,such that there are no duplicate firstname-lastname pairs.
+SELECT 
+	DISTINCT faculty_fname,
+	faculty_lname 
+FROM 
+	faculty 
+WHERE 
+	department_code = 'ME' 
+		AND 
+	id 
+IN 
+	(
+		SELECT 
+			m.id 
+		FROM 
+			members m 
+				INNER JOIN 
+			book_issue USING(member_no)
+	);
+    
 
 -- 8. Write an SQL statement to find the number of book-titles issued on 11th August 2021.
-SELECT count(*) FROM book_issue WHERE doi = '2021-08-11';
+SELECT 
+	count(*) 
+FROM 
+	book_issue 
+WHERE 
+	doi = '2021-08-11';
+
 
 -- 9. Write a SQL statement to find the names of faculty (faculty_fname, faculty_lname) who did not issue any book.
-SELECT faculty_fname,faculty_lname  FROM faculty WHERE id NOT IN (SELECT id FROM members INNER JOIN book_issue USING(member_no));
+SELECT 
+	faculty_fname,
+    faculty_lname  
+FROM 
+	faculty 
+WHERE 
+	id 
+NOT IN 
+	(
+		SELECT 
+			id 
+		FROM 
+			members 
+				INNER JOIN 
+			book_issue USING(member_no)
+	);
+
 
 -- 10. Write a SQL statement to find the unique book titles which are issued to 'PG' students but not to 'UG' students .
-WITH temp as (SELECT title,member_type FROM members m INNER JOIN book_issue USING(member_no) INNER JOIN book_copies USING(accession_no) INNER JOIN book_catalogue 
-USING(ISBN_no))
-SELECT DISTINCT title FROM temp WHERE member_type = "PG" EXCEPT SELECT DISTINCT title FROM temp WHERE member_type="UG";
+WITH temp as 
+(
+	SELECT 
+		title,
+        member_type 
+	FROM 
+		members m 
+			INNER JOIN 
+		book_issue USING(member_no) 
+			INNER JOIN 
+		book_copies USING(accession_no) 
+			INNER JOIN 
+		book_catalogue USING(ISBN_no)
+)
+SELECT 
+	DISTINCT title 
+FROM 
+	temp 
+WHERE 
+	member_type = "PG" 
+EXCEPT 
+SELECT 
+	DISTINCT title 
+FROM 
+	temp 
+WHERE 
+	member_type="UG";
+
 
 -- 11. Write an SQL statement to find student_fname and student_lname of all students who have issued (borrowed) at least one book.
-SELECT student_fname,student_lname FROM students WHERE roll_no IN (SELECT roll_no FROM members NATURAL JOIN book_issue);
+SELECT 
+	student_fname,
+    student_lname 
+FROM 
+	students 
+WHERE 
+	roll_no 
+IN 
+	(
+		SELECT 
+			roll_no 
+		FROM 
+			members 
+				NATURAL JOIN 
+			book_issue
+	);
+
 
 -- 12. Write an SQL statement to find the book titles and the number of copies of the books which has the word 'Easy' in their title.
-SELECT title,COUNT(*) FROM book_catalogue NATURAL JOIN book_copies WHERE title LIKE '%Easy%' GROUP BY title; 
+SELECT 
+	title,
+    COUNT(*) 
+FROM 
+	book_catalogue 
+		NATURAL JOIN 
+	book_copies 
+WHERE 
+	title LIKE '%Easy%' 
+GROUP BY 
+	title; 
+
 
 -- 13. Find the first names and last names of authors, having the author’s first name as a single character.
-SELECT author_fname,author_lname FROM book_authors WHERE author_fname LIKE '_';
+SELECT 
+	author_fname,
+    author_lname 
+FROM 
+	book_authors 
+WHERE 
+	author_fname LIKE '_';
+
 
 -- 14. Find the titles and publishers of all books, except the ones published in year ‘2015’ or ‘2017’.
-SELECT title,publisher FROM book_catalogue WHERE year NOT IN (2015,2017);
+SELECT 
+	title,
+    publisher 
+FROM 
+	book_catalogue 
+WHERE 
+	year 
+NOT IN 
+	(
+	2015,2017
+	);
+    
 
 -- 15. Find the first names and last names of the students whose birthday is in May 2002 or in May 2003.
-SELECT student_fname,student_lname FROM students WHERE dob BETWEEN '2002-05-01' AND '2002-05-31' UNION SELECT student_fname,student_lname FROM students WHERE 
-dob BETWEEN  '2003-05-01' AND '2003-05-31';
+SELECT 
+	student_fname,
+    student_lname 
+FROM 
+	students 
+WHERE 
+	dob BETWEEN '2002-05-01' AND '2002-05-31' 
+UNION 
+SELECT 
+	student_fname,
+    student_lname 
+FROM 
+	students 
+WHERE 
+	dob BETWEEN  '2003-05-01' AND '2003-05-31';
+
 
 -- 16. Find out the total number of members in the UG with alias name or column header as ‘total member’.
-SELECT count(*) AS "total member" FROM members WHERE member_type='UG';
+SELECT 
+	count(*) AS "total member" 
+FROM 
+	members 
+WHERE 
+	member_type='UG';
+
 
 -- 17. Find out the number of female students in each department. Display department code and number of female students.
-SELECT department_code,COUNT(*) FROM departments INNER JOIN faculty USING(department_code) GROUP BY department_code;
+SELECT 
+	department_code,
+    COUNT(*) 
+FROM 
+	departments 
+		INNER JOIN 
+	faculty USING(department_code) 
+GROUP BY 
+	department_code;
+    
 
 -- 18. Write a query to obtain the natural join between the tables, students and departments.
-SELECT * FROM students NATURAL JOIN departments;
+SELECT 
+	* 
+FROM 
+	students 
+		NATURAL JOIN 
+	departments;
+    
 
--- 19. Find details of those instructors of the Accounting department who have more salary than at least one instructor of the Psychology department.
-SELECT * FROM instructors t1 WHERE dept_name="Accounting" AND salary > ANY(SELECT salary FROM instructors WHERE dept_name="Psychology");
+-- 19. Find the name of the department in which Gita Das is studying.
+SELECT 
+	department_name 
+FROM 
+	departments 
+WHERE 
+	department_code 
+IN 
+	(
+		SELECT 
+			department_code 
+		FROM 
+			students s 
+		WHERE 
+			s.student_fname='Gita' 
+				AND 
+			s.student_lname='Das'
+	); 
 
--- 20. Find the name of the department in which Gita Das is studying.
-SELECT department_name FROM departments WHERE department_code IN (SELECT department_code FROM students s WHERE s.student_fname='Gita' AND s.student_lname='Das'); 
 
--- 21. Find the roll number of all male students, having their department building in ‘Block_2’.
-SELECT roll_no FROM students WHERE department_code IN (SELECT department_code FROM departments WHERE department_building='Block_2') AND gender = "M";
+-- 20. Find the roll number of all male students, having their department building in ‘Block_2’.
+SELECT 
+	roll_no 
+FROM 
+	students 
+WHERE 
+	department_code 
+IN 
+	(
+		SELECT 
+			department_code 
+		FROM 
+			departments 
+		WHERE 
+			department_building='Block_2'
+	) AND gender = "M";
 
--- 22. Find the first name, last name and the roll number of students having their department building in ‘Block_1’.
-SELECT student_fname,student_lname,roll_no FROM students WHERE department_code IN (SELECT department_code FROM departments WHERE department_building='Block_1');
 
--- 23. Find out the details of the members who have not issued any books.
-SELECT * FROM members WHERE NOT EXISTS (SELECT * FROM book_issue WHERE members.member_no = book_issue.member_no);
+-- 21. Find the first name, last name and the roll number of students having their department building in ‘Block_1’.
+SELECT 
+	student_fname,
+    student_lname,
+    roll_no 
+FROM 
+	students 
+WHERE 
+	department_code 
+IN 
+	(
+		SELECT 
+			department_code 
+		FROM 
+			departments 
+		WHERE 
+			department_building='Block_1'
+	);
 
--- 24. Find out the name of courses which have been taught in both Fall semester and Spring semester.
-SELECT title FROM course WHERE course_id IN ((SELECT course_id FROM section WHERE semester = 'Fall') INTERSECT (SELECT course_id FROM section WHERE semester='Spring'));
 
--- 25. Write a SQL statement to find out the number of students who have studied in each building from 2005 till 2008 (including 2005, 2008).
-SELECT DISTINCT(student.ID),building FROM student INNER JOIN department ON student.dept_name = department.dept_name INNER JOIN takes ON student.ID = takes.ID WHERE YEAR BETWEEN 2005 AND 2008 
-GROUP BY building;
+-- 22. Find out the details of the members who have not issued any books.
+SELECT 
+	* 
+FROM 
+	members 
+WHERE 
+	NOT EXISTS 
+		(
+			SELECT 
+				* 
+			FROM 
+				book_issue 
+			WHERE 
+				members.member_no = book_issue.member_no
+		);
 
--- 26. Write a SQL statement to find out the dates when one or more copies of the book having the title “Learning with Python” has been issued.
-SELECT DISTINCT doi FROM book_issue INNER JOIN book_copies USING(accession_no) INNER JOIN book_catalogue USING(ISBN_no) WHERE book_catalogue.title='Learning with Pyhton';
+
+-- 23. Write a SQL statement to find out the dates when one or more copies of the book having the title “Learning with Python” has been 
+-- issued.
+SELECT 
+	DISTINCT doi 
+FROM 
+	book_issue 
+		INNER JOIN 
+	book_copies USING(accession_no) 
+		INNER JOIN 
+	book_catalogue USING(ISBN_no) 
+WHERE 
+	book_catalogue.title='Learning with Python';
 
