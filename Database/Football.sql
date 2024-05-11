@@ -1,5 +1,5 @@
-CREATE DATABASE football1;
-USE football1;
+CREATE DATABASE football;
+USE football;
 
 CREATE TABLE managers (
     mgr_id varchar(10) NOT NULL,
@@ -217,91 +217,385 @@ ALTER TABLE players ADD CONSTRAINT players_fk0 FOREIGN KEY (team_id) REFERENCES 
 --  Problems Related to Database 
 
 -- 1. Write a SQL statement to find the name of the manager of the team: 'All Stars'.
-SELECT name FROM managers WHERE team_id in ( SELECT  team_id FROM teams WHERE name="All Stars");
+SELECT 
+	name 
+FROM 
+	managers 
+WHERE 
+	team_id 
+IN 
+	( 
+		SELECT  
+			team_id 
+		FROM 
+			teams 
+		WHERE 
+			name="All Stars"
+	);
+
 
 -- 2. Write an SQL statement to find the names of all teams.
-SELECt name FROM teams;
+SELECT 
+	name 
+FROM 
+	teams;
+
 
 -- 3. Write an SQL statement to find the fourth referee id for the match with match number 'M0001'.
-SELECT fourth_referee FROM match_referees WHERE match_num="M0001";
+SELECT 
+	fourth_referee 
+FROM 
+	match_referees 
+WHERE 
+	match_num="M0001";
+
 
 -- 4. Write an SQL statement to find the match numbers and fourth referees ID of the matches where assistant referee 1(assistant_referee_1) is 'R0002'.
-SELECT match_num,fourth_referee FROM match_referees WHERE assistant_referee_1="R0002";
+SELECT 
+	match_num,
+    fourth_referee 
+FROM 
+	match_referees 
+WHERE 
+	assistant_referee_1="R0002";
+
 
 -- 5. Write an SQL statement to find the player name and jersey number of players from the team: 'Rainbow'.
-SELECT name,jersey_no FROM players WHERE team_id in (SELECT team_id FROM teams  WHERE name = 'Rainbow');
+SELECT 
+	name,
+    jersey_no 
+FROM 
+	players 
+WHERE 
+	team_id 
+IN	
+	(
+		SELECT 
+			team_id 
+		FROM 
+			teams  
+		WHERE 
+			name = 'Rainbow'
+	);
+
 
 -- 6. Write an SQL query to find the name of the city of teams whose home jersey color is 'Red'.
-SELECT city FROM teams WHERE jersey_home_color='Red';
+SELECT 
+	city 
+FROM 
+	teams 
+WHERE 
+	jersey_home_color='Red';
+
 
 -- 7. Write an SQL query to find the player IDs of the players whose name starts with 'K'.
-SELECT player_id FROM players WHERE name LIKE 'K%';
+SELECT 
+	player_id 
+FROM 
+	players 
+WHERE 
+	name LIKE 'K%';
+
 
 -- 8 Write an SQL query to find the match dates where the host team score is not between 3 and 5.
-SELECT match_date FROM matches WHERE host_team_score NOT BETWEEN 3 AND 5;
+SELECT 
+	match_date 
+FROM 
+	matches 
+WHERE 
+	host_team_score NOT BETWEEN 3 AND 5;
+
 
 -- 9. Write an SQL query to find the names of the guest team of the match which was played on '2020-05-21'.
-SELECT name FROM teams WHERE team_id IN (SELECT guest_team_id FROM matches WHERE match_date = '2020-05-21');
+SELECT 
+	name 
+FROM 
+	teams 
+WHERE 
+	team_id 
+IN
+	(
+		SELECT 
+			guest_team_id 
+		FROM 
+			matches 
+		WHERE 
+			match_date = '2020-05-21'
+	);
+    
 
 -- 10. Write an SQL query to find the team ID and the largest jersey number of each team.
-SELECT team_id,MAX(jersey_no) FROM players GROUP BY team_id;
+SELECT 
+	team_id,
+    MAX(jersey_no) 
+FROM 
+	players 
+GROUP BY 
+	team_id;
+
 
 -- 11. Write an SQL query to find the team name and manager name whose manager IDs are not 'M0001', 'M0003' or 'M0005'.
-SELECT t.name,m.name FROM teams t INNER JOIN managers m USING(team_id) WHERE m.mgr_id NOT IN ('M0001','M0003','M0005');
+SELECT 
+	t.name,
+    m.name 
+FROM 
+	teams t 
+		INNER JOIN 
+	managers m USING(team_id) 
+WHERE 
+	m.mgr_id 
+NOT IN 
+	(
+		'M0001','M0003','M0005'
+	);
+
 
 -- 12. Write an SQL query to find the name, dob and the respective team name and the manager name of each player whose jersey number is '39'.
-SELECT p.name,p.dob,t.name,m.name FROM players p INNER JOIN teams t USING(team_id) INNER JOIN managers m USING(team_id) WHERE p.jersey_no=39;
+SELECT 
+	p.name,
+    p.dob,
+    t.name,
+    m.name 
+FROM 
+	players p 
+		INNER JOIN 
+	teams t USING(team_id) 
+		INNER JOIN 
+	managers m USING(team_id) 
+WHERE 
+	p.jersey_no=39;
+
 
 -- 13. Write a SQL statement to find the names of teams that have played more than 3 matches.
-WITH count_matches AS (SELECT t.team_id AS team_id,t.name AS name FROM teams t INNER JOIN matches m WHERE t.team_id = m.host_team_id OR t.team_id = m.guest_team_id)
-SELECT name FROM count_matches GROUP BY team_id HAVING COUNT(team_id) > 3;
+WITH count_matches AS 
+(
+	SELECT 
+		t.team_id AS team_id,
+        t.name AS name 
+	FROM 
+		teams t 
+			INNER JOIN 
+		matches m 
+	WHERE 
+		t.team_id = m.host_team_id 
+			OR 
+		t.team_id = m.guest_team_id
+)
+SELECT 
+	name 
+FROM 
+	count_matches 
+GROUP BY 
+	name
+HAVING 
+	COUNT(name) > 3;
+
 
 -- 14. Write an SQL statement to find the match numbers of those matches in which the host team scored more (goals) than the guest team.
-SELECT match_num FROM matches WHERE host_team_score > guest_team_score;
+SELECT 
+	match_num 
+FROM 
+	matches 
+WHERE 
+	host_team_score > guest_team_score;
+
 
 -- 15. Write an SQL statement to find the colors of the home-jersey and the away-jersey (jersey home color, jersey away color) used by the team: “All Stars”.
-SELECT jersey_home_color,jersey_away_color FROM teams WHERE name = "All Stars";
+SELECT 
+	jersey_home_color,
+    jersey_away_color 
+FROM 
+	teams 
+WHERE 
+	name = "All Stars";
+    
 
 -- 16. Write an SQL statement to find the names of players of the team: “All Stars”.
-SELECT name FROM players WHERE team_id IN (SELECT team_id FROM teams WHERE name = "All Stars");
+SELECT 
+	name 
+FROM 
+	players 
+WHERE 
+	team_id 
+IN 
+	(
+		SELECT 
+			team_id 
+		FROM 
+			teams 
+		WHERE 
+			name = "All Stars"
+	);
+    
 
 -- 17. Write an SQL statement to find the match number of the match held on '2020-05-15' and the name of the first assistant match referee who refereed that match. 
 -- Print match_num first, followed by respective first assistant match referee name. Note: First assistant referee is to be obtained from the 'assistant_referee_1' 
 -- attribute
-SELECT match_num,name FROM matches NATURAL JOIN match_referees INNER JOIN referees ON assistant_referee_1 = referee_id WHERE match_date='2020-05-15';
+SELECT 
+	match_num,
+    name 
+FROM 
+	matches 
+		NATURAL JOIN 
+	match_referees 
+		INNER JOIN 
+	referees ON assistant_referee_1 = referee_id 
+WHERE 
+	match_date='2020-05-15';
+
 
 -- 18. Write an SQL statement to find the name of the oldest player in the team named 'All Stars'.
-SELECT name FROM players WHERE team_id IN (SELECT team_id FROM teams WHERE name = "All Stars") ORDER BY dob LIMIT 1;
+SELECT 
+	name 
+FROM 
+	players 
+WHERE 
+	team_id 
+IN 
+	(
+		SELECT 
+			team_id 
+		FROM 
+			teams 
+		WHERE 
+			name = "All Stars"
+	) 
+ORDER BY 
+	dob 
+LIMIT 1;
 
--- 19. Write an SQL statement to find the cities and names of the teams that have players with jersey number (jersey_no) starting from 80 to 99.
-SELECT teams.name,city FROM teams INNER JOIN players ON teams.team_id = players.team_id WHERE teams.team_id IN (SELECT team_id FROM players WHERE jersey_no BETWEEN 80 AND 99);
+
+-- 19. Write an SQL statement to find the cities and names of the teams that have players with jersey number (jersey_no) starting from 80
+-- to 99.
+SELECT 
+	DISTINCT teams.name,
+    city 
+FROM 
+	teams 
+		INNER JOIN 
+	players ON teams.team_id = players.team_id 
+WHERE 
+	teams.team_id 
+IN 
+	(
+		SELECT 
+			team_id 
+		FROM 
+			players 
+		WHERE 
+			jersey_no BETWEEN 80 AND 99
+	);
+
 
 -- 20. Find the names and date-of-births of those managers who have joined in years 2019 and 2020.
-SELECT name,dob FROM managers WHERE since BETWEEN '2019-01-01' AND '2020-12-31';
+SELECT 
+	name,
+    dob 
+FROM 
+	managers 
+WHERE 
+	since BETWEEN '2019-01-01' AND '2020-12-31';
+
 
 -- 21. Find the names of all those teams where the last name of the team starts with the letter S.
-SELECT name FROM teams WHERE name LIKE '_% S%';
+SELECT 
+	name 
+FROM 
+	teams 
+WHERE 
+	name LIKE '_% S%';
+
 
 -- 22. Write a SQL statement to find the names of players that start with ‘S’ but does not end with ‘n’.
-SELECT name FROM players WHERE name LIKE 'S%' EXCEPT SELECT name FROM players WHERE name LIKE "%n";
-SELECT name FROM players WHERE name LIKE 'S%' AND  name NOT LIKE "%n";
+SELECT 
+	name 
+FROM 
+	players 
+WHERE 
+	name LIKE 'S%' 
+EXCEPT 
+SELECT 
+	name 
+FROM 
+	players 
+WHERE 
+	name LIKE "%n";
+--                            OR
+SELECT 
+	name 
+FROM
+	players
+WHERE 
+	name LIKE 'S%' AND  name NOT LIKE "%n";
 
 -- 23. Find out the total number of players who are playing from the team id ‘T0001’.
-SELECT count(player_id) FROM players WHERE team_id = 'T0001';
+SELECT 
+	count(player_id) 
+FROM 
+	players 
+WHERE 
+	team_id = 'T0001';
+    
 
 -- 24. Write a SQL statement to find out the manager’s date of birth(dob) of the team for which “Shlok” plays.
-SELECT dob FROM managers WHERE team_id IN (SELECT team_id FROM players WHERE name = 'Shlok');
+SELECT 
+	dob 
+FROM 
+	managers 
+WHERE 
+	team_id 
+IN 
+	(
+		SELECT 
+			team_id 
+		FROM 
+			players 
+		WHERE 
+			name = 'Shlok'
+	);
+    
 
 -- 25. Write a SQL statement to find out match number(match num) played in the playground “Emirates Stadium”.
-SELECT match_num FROM matches WHERE host_team_id = ANY(SELECT team_id FROM teams WHERE playground='Emirates Stadium');
+SELECT 
+	match_num 
+FROM 
+	matches 
+WHERE 
+	host_team_id = 
+		ANY
+			(
+				SELECT 
+					team_id 
+				FROM 
+					teams 
+				WHERE 
+					playground='Emirates Stadium'
+			);
+            
 
 -- 26. Find the name, player id, date of birth and city of all players who played for team ‘Rainbow’.
-SELECT p.name,p.player_id,p.dob,t.city FROM players p INNER JOIN teams t USING(team_id) WHERE t.name='Rainbow';
+SELECT 
+	p.name,
+    p.player_id,
+    p.dob,
+    t.city 
+FROM 
+	players p 
+		INNER JOIN 
+	teams t USING(team_id) 
+WHERE 
+	t.name='Rainbow';
+    
 
 -- 27. Find the name of the teams which belong to the same city as the team ‘Amigos’.
-SELECT t1.name FROM teams t1,teams t2 WHERE t2.name='Amigos' AND t1.city=t2.city AND t1.name <> 'Amigos';
-
--- 28. 
-
-
-
+SELECT 
+	t1.name 
+FROM 
+	teams t1,
+    teams t2 
+WHERE 
+	t2.name='Amigos' 
+		AND 
+	t1.city=t2.city 
+		AND 
+	t1.name <> 'Amigos';
