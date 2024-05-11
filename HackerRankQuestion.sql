@@ -8544,21 +8544,43 @@ ORDER BY
 -- Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
 -- Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
 SELECT 
-	f1.X,
-    f1.Y
+	X,
+    Y 
+FROM
+(
+	SELECT 
+		f1.X AS X,
+        f1.Y AS Y 
+	FROM 
+		functions f1,
+        functions f2 
+	WHERE 
+		f1.X = f2.Y 
+			AND 
+		f2.X = f1.Y 
+			AND 
+		f1.X <> f2.X 
+			AND 
+		f1.Y <> f2.Y
+			AND 
+		f1.X  < f1.Y
+) AS t
+UNION
+SELECT 
+	X,
+    Y 
 FROM 
-	functions f1,
-    functions f2 
+	functions 
 WHERE 
-	f1.X = f2.Y 
-		AND 
-	f2.X = f1.Y 
-		AND 
-	f1.X <> f2.X
-		AND
-	f1.Y <> f2.Y
+	X = Y
+GROUP BY
+	X,
+    y
+HAVING
+	COUNT(*) > 1
 ORDER BY 
-	f1.X ASC;
+	X;
+
 
 -- 51. Generate the following two result sets:
 -- 	1. Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a 
@@ -8603,3 +8625,74 @@ FROM
 GROUP BY 
 	rnk;
 
+
+-- 53. P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+-- * * * * * 
+-- * * * * 
+-- * * * 
+-- * * 
+-- *
+-- Write a query to print the pattern P(20).
+DELIMITER //
+CREATE PROCEDURE P(total_row INT)
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    DECLARE output VARCHAR(255);
+    set i = total_row;
+    set output = " "; 
+    WHILE i > 0 
+    DO
+       set output = CONCAT(output,REPEAT("* ",i),"\n");
+       set i = i -1;
+    END WHILE;
+	SELECT output;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION P(total_row INT)
+RETURNS VARCHAR (255)
+DETERMINISTIC
+BEGIN
+    DECLARE i INT;
+    DECLARE output VARCHAR(255);
+    set i = total_row;
+    set output = " "; 
+    WHILE i > 0 
+    DO
+       set output = CONCAT(output,REPEAT("* ",i),"\n");
+       set i = i -1;
+    END WHILE;
+    RETURN output;
+END //
+DELIMITER ;
+
+CALL P(5);
+SELECT P(5);
+
+set @total_row = 21;
+SELECT 
+	repeat("* ",@total_row :=@total_row - 1) AS pattern 
+FROM 
+	information_schema.tables 
+LIMIT 
+	20;
+
+
+-- 54. P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+-- * 
+-- * * 
+-- * * * 
+-- * * * * 
+-- * * * * *
+-- Write a query to print the pattern P(20).
+set @total_row = 0;
+SELECT 
+	repeat("* ",@total_row :=@total_row + 1) AS pattern 
+FROM 
+	information_schema.tables 
+LIMIT 
+	20;
+    
+    
+-- 55. 
