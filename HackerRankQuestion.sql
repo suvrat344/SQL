@@ -7538,6 +7538,239 @@ INSERT INTO projects VALUES
 (12,'2015-11-12','2015-11-13'),
 (13,'2015-11-17','2015-11-18');
 
+CREATE TABLE occupations
+(
+	name VARCHAR(50),
+    occupation VARCHAR(50)
+);
+INSERT INTO occupations VALUES
+('Ashley','Professor'),
+('Samantha','Actor'),
+('Julia','Doctor'),
+('Britney','Professor'),
+('Maria','Professor'),
+('Meera','Professor'),
+('Priya','Doctor'),
+('Priyanka','Professor'),
+('Jennifer','Actor'),
+('Ketty','Actor'),
+('Belvet','Professor'),
+('Naomi','Professor'),
+('Jane','Singer'),
+('Jenny','Singer'),
+('Kristeen','Singer'),
+('Christeen','Singer'),
+('Eve','Actor'),
+('Aamina','Doctor');
+
+
+CREATE TABLE students
+(
+	ID int,
+    name VARCHAR(50)
+);
+INSERT INTO students VALUES
+(1,'Samantha'),
+(2,'Julia'),
+(3,'Britney'),
+(4,'Kristeen'),
+(5,'Dyana'),
+(6,'Jenny'),
+(7,'Christene'),
+(8,'Meera'),
+(9,'Priya'),
+(10,'Priyanka'),
+(11,'Paige'),
+(12,'Jane'),
+(13,'Belvet'),
+(14,'Scarlet'),
+(15,'Salma'),
+(16,'Amanda'),
+(17,'Maria'),
+(18,'Stuart'),
+(19,'Aamina'),
+(20,'Amina');
+
+CREATE TABLE Friends
+(
+	id INT,
+    friend_id INT
+);
+INSERT INTO friends VALUES
+(1,14),
+(2,15),
+(3,18),
+(4,19),
+(5,20),
+(6,5),
+(7,6),
+(8,7),
+(9,8),
+(10,1),
+(11,2),
+(12,3),
+(13,4),
+(14,9),
+(15,10),
+(16,11),
+(17,12),
+(18,13),
+(19,16),
+(20,17);
+
+
+CREATE TABLE packages
+(
+	id INT,
+    salary float
+);
+INSERT INTO packages VALUES
+(1,15.5),
+(2,15.6),
+(3,16.7),
+(4,18.8),
+(5,31.5),
+(6,45),
+(7,47),
+(8,46),
+(9,39),
+(10,11.1),
+(11,12.1),
+(12,13.1),
+(13,14.1),
+(14,15.1),
+(15,17.1),
+(16,21.1),
+(17,31.1),
+(18,13.15),
+(19,33.33),
+(20,22.16);
+
+
+CREATE TABLE functions
+(
+	X int,
+    Y int
+);
+INSERT INTO functions VALUES
+(86,86),
+(27,27),
+(45,45),
+(95,95),
+(11,11),
+(18,8),
+(85,85),
+(2,2),
+(77,77),
+(91,91),
+(15,15),
+(84,84),
+(51,51),
+(32,32),
+(35,35),
+(8,8),
+(92,92),
+(67,67),
+(62,62),
+(33,33),
+(13,13),
+(15,11),
+(18,18),
+(3,3),
+(38,38),
+(80,80),
+(34,34),
+(6,6),
+(72,72),
+(14,12),
+(44,44),
+(4,22),
+(90,90),
+(47,47),
+(78,78),
+(23,3),
+(42,42),
+(56,56),
+(79,79),
+(55,55),
+(65,65),
+(17,17),
+(64,64),
+(4,4),
+(28,28),
+(19,19),
+(17,9),
+(36,36),
+(25,25),
+(81,81),
+(60,60),
+(48,48),
+(5,5),
+(88,88),
+(7,19),
+(21,21),
+(29,29),
+(52,52),
+(9,17),
+(9,9),
+(13,13),
+(16,10),
+(1,1),
+(31,31),
+(46,46),
+(7,7),
+(58,58),
+(23,23),
+(87,87),
+(83,83),
+(66,66),
+(93,93),
+(24,2),
+(98,98),
+(53,53),
+(20,6),
+(61,61),
+(20,20),
+(96,96),
+(99,99),
+(73,73),
+(2,24),
+(14,14),
+(71,71),
+(5,21),
+(22,4),
+(75,75),
+(6,20),
+(97,97),
+(41,41),
+(26,26),
+(22,22),
+(8,18),
+(74,74),
+(40,40),
+(21,5),
+(94,94),
+(76,76),
+(49,49),
+(11,15),
+(59,59),
+(89,89),
+(68,68),
+(24,24),
+(37,37),
+(12,12),
+(63,63),
+(43,43),
+(16,16),
+(100,100),
+(39,39),
+(25,1),
+(69,69),
+(54,54),
+(50,50),
+(30,30),
+(10,10);
+
 -- 1. Query all columns for all American cities in the CITY table with populations larger than 100000. The CountryCode for America is USA.
 SELECT 
 	* 
@@ -8274,3 +8507,99 @@ ORDER BY
 	DATEDIFF(min(end_date),start_date) ASC,
     start_date ASC;
 			
+            
+-- 49. You are given three tables: Students, Friends and Packages. Students contains two columns: ID and Name. Friends contains two 
+-- columns: ID and Friend_ID (ID of the ONLY best friend). Packages contains two columns: ID and Salary (offered salary in $ thousands 
+-- per month).
+-- Write a query to output the names of those students whose best friends got offered a higher salary than them. Names must be ordered by
+-- the salary amount offered to the best friends. It is guaranteed that no two students got same salary offer.
+SELECT 
+	name
+FROM
+(
+	SELECT 
+		id,name,salary,friend_id
+	FROM 
+		students s 
+			INNER JOIN 
+		friends f USING(id) 
+			INNER JOIN 
+		packages p USING(id) 
+) AS t1
+INNER JOIN
+(
+SELECT 
+	id,
+	salary AS "friend_salary" 
+FROM 
+	packages 
+) AS t2 ON t2.id = t1.friend_id
+WHERE
+	salary < friend_salary
+ORDER BY
+	friend_salary;
+
+
+-- 50. You are given a table, Functions, containing two columns: X and Y.
+-- Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+-- Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
+SELECT 
+	f1.X,
+    f1.Y
+FROM 
+	functions f1,
+    functions f2 
+WHERE 
+	f1.X = f2.Y 
+		AND 
+	f2.X = f1.Y 
+		AND 
+	f1.X <> f2.X
+		AND
+	f1.Y <> f2.Y
+ORDER BY 
+	f1.X ASC;
+
+-- 51. Generate the following two result sets:
+-- 	1. Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a 
+--     parenthetical (i.e.: enclosed in parentheses). For example: AnActorName(A), ADoctorName(D), AProfessorName(P), and ASingerName(S).
+-- 2. Query the number of ocurrences of each occupation in OCCUPATIONS. Sort the occurrences in ascending order, and output them in the 
+--    following format:
+-- 			There are a total of [occupation_count] [occupation]s.
+--    where [occupation_count] is the number of occurrences of an occupation in OCCUPATIONS and [occupation] is the lowercase occupation 
+--    name. If more than one Occupation has the same [occupation_count], they should be ordered alphabetically.
+-- Note: There will be at least two entries in the table for each type of occupation.
+SELECT
+        CONCAT(NAME,"(",LEFT(occupation,1),")")  AS  "name"
+    FROM 
+        occupations
+UNION ALL
+SELECT
+    CONCAT("There are a total of ",COUNT(*)," ",LOWER(occupation),"s.") AS "name"
+FROM
+    occupations
+GROUP BY
+    occupation
+ORDER BY
+    name ASC;
+    
+
+-- 52. Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding 
+-- Occupation. The output column headers should be Doctor, Professor, Singer, and Actor, respectively.
+-- Note: Print NULL when there are no more names corresponding to an occupation.
+SELECT 
+	MAX(IF(occupation="Doctor",name,NULL)) AS "Doctor",
+	MAX(IF(occupation="Actor",name,NULL)) AS "Actor",
+    MAX(IF(occupation="Professor",name,NULL)) AS "Professor",
+    MAX(IF(occupation="Singer",name,NULL)) AS "Singer"
+FROM
+(
+	SELECT 
+		*,
+        ROW_NUMBER() OVER(PARTITION BY occupation ORDER BY name) AS rnk 
+	FROM 
+		occupations
+) AS t
+GROUP BY 
+	rnk;
+
