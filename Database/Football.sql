@@ -599,3 +599,46 @@ WHERE
 	t1.city=t2.city 
 		AND 
 	t1.name <> 'Amigos';
+    
+    
+/* 
+Write a stored procedure GetTeamDetails that takes a team_id as input and returns the following information:
+	Team name
+	Team city
+	Playground name
+	Home and away jersey colors
+	List of players associated with the team (including player_id, player_name, jersey_no) Manager's name and the date since they have been 
+	with the team.
+*/
+CALL GetTeamDetails("T0001");
+
+/*
+Create a stored procedure GetTeamMatchSummary that takes a team_id as input and returns a summary of all matches that the team played, 
+including:
+	Match number
+	Match date
+	Host and guest team names
+	Host and guest team scores
+	If the team was the host, calculate whether they won, lost, or drew the match.
+	If the team was the guest, calculate whether they won, lost, or drew the match.
+*/
+CALL GetTeamMatchSummary("T0001");
+
+
+/* 
+Find the number of players for each football team:
+*/
+SELECT 
+	t.name, 
+    COUNT(p.player_id) AS player_count 
+FROM 
+	teams t 
+	INNER JOIN 
+    players p 
+ON 
+	t.team_id = p.team_id 
+GROUP BY 
+	t.name;
+    
+
+
